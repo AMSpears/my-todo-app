@@ -11,7 +11,21 @@ const adapterConfig = { knexOptions: { connection: 'postgres://localhost/todo_ap
 
 const keystone = new Keystone({
   adapter: new Adapter(adapterConfig),
+  cookieSecret: {
+    secure: process.env.NODE_ENV === 'production', // Default to true in production
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    sameSite: false,
+  },
+  default: {
+    list: true,
+    field: true,
+    custom: true
+  },
+  queryLimits: {
+    maxTotalResults: 1000,
+  },
 });
+keystone.connect()
 
 keystone.createList('Todo', {
   schemaDoc: 'A list of things which need to be done',

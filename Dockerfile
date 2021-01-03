@@ -1,16 +1,26 @@
-FROM node:12
+# https://docs.docker.com/samples/library/node/
+ARG NODE_VERSION=12.10.0
+# https://github.com/Yelp/dumb-init/releases
+ARG DUMB_INIT_VERSION=1.2.2
 
-WORKDIR /my-app
+# Build container
+FROM node:${NODE_VERSION}-alpine AS build
+ARG DUMB_INIT_VERSION
 
-COPY package*.json ./
+WORKDIR /home/node
 
-RUN npm install
+RUN apk add --no-cache build-base python2 npm && \
+  wget -O dumb-init -q https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
+  chmod +x dumb-init
+ADD . /home/node
+RUN npm install && npm run build && npm cache clean
 
-COPY . .
+# Runtime container
+FROM node:${NODE_VERSION}-alpine
 
-ENV PORT=3000
+WORKDIR /home/node
+
+COPY --from=build /home/node /home/node
 
 EXPOSE 3000
-
-CMD ["npm", "start"]
-
+CMD ["./dumb-init", "npm", "start"]
