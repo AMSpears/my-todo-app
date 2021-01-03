@@ -13,7 +13,7 @@ RUN apk add --no-cache build-base python2 npm && \
   wget -O dumb-init -q https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64 && \
   chmod +x dumb-init
 ADD . /home/node
-RUN npm install && npm run build && npm cache clean
+RUN npm install && npm run build && npm cache verify
 
 # Runtime container
 FROM node:${NODE_VERSION}-alpine

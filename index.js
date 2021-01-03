@@ -5,7 +5,7 @@ const { AdminUIApp } = require('@keystonejs/app-admin-ui');
 const { StaticApp } = require('@keystonejs/app-static');
 
 const { KnexAdapter: Adapter } = require('@keystonejs/adapter-knex');
-const PROJECT_NAME = 'todoApp';
+const PROJECT_NAME = 'todo_app';
 const adapterConfig = { knexOptions: { connection: 'postgres://localhost/todo_app' } };
 
 
@@ -15,17 +15,8 @@ const keystone = new Keystone({
     secure: process.env.NODE_ENV === 'production', // Default to true in production
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     sameSite: false,
-  },
-  default: {
-    list: true,
-    field: true,
-    custom: true
-  },
-  queryLimits: {
-    maxTotalResults: 1000,
-  },
+  }
 });
-keystone.connect()
 
 keystone.createList('Todo', {
   schemaDoc: 'A list of things which need to be done',
