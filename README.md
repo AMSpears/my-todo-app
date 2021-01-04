@@ -11,4 +11,3 @@ Once running, the Keystone Admin UI is reachable via `localhost:3000/admin`.
 ## Next steps
 
 This example has no authentication, meaning anyone can add or remove todo items. You can lean more about access control and authentication at: `https://keystonejs.com/api/access-control`.
-
